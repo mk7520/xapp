@@ -1,0 +1,194 @@
+<!DOCTYPE html><html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لغة Xapp - الصفحة الرئيسية</title>
+    <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.44.0/min/vs/loader.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f8f9fa; color: #333; }
+        header, footer { background: #005f73; color: white; padding: 1rem; text-align: center; }
+        nav { background: #0a9396; padding: 0.5rem; text-align: center; }
+        nav a { color: white; margin: 0 10px; text-decoration: none; }
+        section { padding: 2rem; }
+        h1, h2 { color: #005f73; }
+        .logo-container { text-align: center; margin-top: 1rem; }
+        .logo-container img { width: 120px; height: auto; }
+        #editor { height: 300px; border: 1px solid #ccc; margin-top: 1rem; }
+        button {
+            padding: 0.5rem 1rem;
+            background: #005f73;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-top: 0.5rem;
+        }
+        .btn-group { margin-top: 1rem; display: flex; gap: 1rem; flex-wrap: wrap; }
+        input.share-url { width: 100%; padding: 0.5rem; margin-top: 0.5rem; direction: ltr; }
+        #preview-container { background: #ffffff; padding: 1rem; margin-top: 2rem; border: 2px dashed #ccc; display: none; }
+        .page-section { margin-bottom: 2rem; border: 1px solid #ddd; padding: 1rem; border-radius: 10px; }
+        .square { display: flex; align-items: center; justify-content: center; margin: 0.5rem 0; border-radius: 5px; }
+        .img-element { display: block; margin: 0.5rem auto; max-width: 100%; border-radius: 10px; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <img src="file-UY93N2mUZvLciyyjg96e4u" alt="Xapp Logo">
+        </div>
+        <h1>مرحباً بك في لغة Xapp</h1>
+        <p>أنشئ تطبيقك الخاص بسهولة ومرونة</p>
+    </header><nav>
+    <a href="#about">عن Xapp</a>
+    <a href="#docs">التوثيق</a>
+    <a href="#blog">المدونة</a>
+    <a href="#dev">للمطورين</a>
+    <a href="#playground">ابدأ البرمجة</a>
+</nav>
+
+<section id="about">
+    <h2>عن لغة Xapp</h2>
+    <p>لغة Xapp صممت لتبسيط عملية تطوير التطبيقات، حيث توفر بنية سهلة وقابلة للقراءة لكتابة واجهات التطبيقات وتفاصيلها.</p>
+</section>
+
+<section id="docs">
+    <h2>التوثيق</h2>
+    <p>ابدأ من هنا لفهم كيفية كتابة كود بلغة Xapp.</p>
+    <p><a href="docs/xapp-doc-v1.0.html" target="_blank">عرض التوثيق الرسمي</a></p>
+</section>
+
+<section id="blog">
+    <h2>المدونة</h2>
+    <p>تابع آخر التحديثات والدروس حول Xapp.</p>
+    <ul>
+        <li>ما الجديد في Xapp v1.0؟</li>
+        <li>كيفية إنشاء أول تطبيق بلغة Xapp</li>
+    </ul>
+</section>
+
+<section id="dev">
+    <h2>بيئة المطورين</h2>
+    <p>قريباً: جرب الكود مباشرة في المتصفح، أو حمّل المحرر.</p>
+</section>
+
+<section id="playground">
+    <h2>ابدأ البرمجة بلغة Xapp</h2>
+    <div id="editor"></div>
+    <div class="btn-group">
+        <button onclick="downloadXappCode()">تحميل كود .xapp</button>
+        <button onclick="generateShareLink()">رابط مشاركة</button>
+        <button onclick="renderPreview()">تشغيل المعاينة</button>
+    </div>
+    <input type="text" id="share-url" class="share-url" readonly placeholder="سيظهر رابط المشاركة هنا">
+    <div id="preview-container"></div>
+</section>
+
+<footer>
+    <p>© 2025 Xapp Programming Language - جميع الحقوق محفوظة</p>
+</footer>
+
+<script>
+    let editor;
+    require.config({ paths: { 'vs': 'https://cdn.jsdelivr.net/npm/monaco-editor@0.44.0/min/vs' } });
+    require(['vs/editor/editor.main'], function () {
+        const savedCode = localStorage.getItem('xapp-code') || atob(new URLSearchParams(window.location.search).get('code') || '') || `xapp > start > {\n    app > about (...)\n}`;
+        editor = monaco.editor.create(document.getElementById('editor'), {
+            value: savedCode,
+            language: 'javascript',
+            theme: 'vs-dark'
+        });
+        editor.onDidChangeModelContent(() => {
+            localStorage.setItem('xapp-code', editor.getValue());
+        });
+    });
+
+    function downloadXappCode() {
+        const code = editor.getValue();
+        const blob = new Blob([code], { type: 'text/plain' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'app.xapp';
+        link.click();
+    }
+
+    function generateShareLink() {
+        const code = editor.getValue();
+        const encoded = btoa(code);
+        const url = `https://play.xapp.dev/?code=${encoded}`;
+        const input = document.getElementById('share-url');
+        input.value = url;
+        input.select();
+        document.execCommand('copy');
+    }
+
+    function renderPreview() {
+        const container = document.getElementById('preview-container');
+        container.innerHTML = '';
+        container.style.display = 'block';
+        const code = editor.getValue();
+        const pages = code.match(/app\s*>\s*designs\s*>\s*(.*?)\s*\{([\s\S]*?)\}/g);
+
+        if (!pages) return;
+
+        pages.forEach(block => {
+            const titleMatch = block.match(/page\d+\.title\s*=\s*\"(.*?)\"/);
+            const title = titleMatch ? titleMatch[1] : 'صفحة';
+            const contentMatch = block.match(/\{([\s\S]*?)\}$/);
+            const content = contentMatch ? contentMatch[1] : '';
+            const section = document.createElement('div');
+            section.className = 'page-section';
+
+            const header = document.createElement('h3');
+            header.textContent = title;
+            section.appendChild(header);
+
+            const squareRegex = /square\s*=\s*(.*?)/g;
+            let match;
+            while ((match = squareRegex.exec(content))) {
+                const attrs = parseAttributes(match[1]);
+                const div = document.createElement('div');
+                div.className = 'square';
+                div.textContent = attrs['Internal text'] || '';
+                div.style.width = attrs['width'] || '100px';
+                div.style.height = attrs['height'] || '100px';
+                div.style.backgroundColor = attrs['color'] || '#ddd';
+                div.style.color = attrs['text-color'] || '#000';
+                div.style.justifyContent = convertAlign(attrs['text-place']);
+                section.appendChild(div);
+            }
+
+            const imgRegex = /img-from\s*=\s*\"(.*?)\".*?width:(\d+%)?;.*?img-place:(\w+)/g;
+            while ((match = imgRegex.exec(content))) {
+                const img = document.createElement('img');
+                img.src = match[1];
+                img.className = 'img-element';
+                img.style.width = match[2] || '100%';
+                img.style.display = 'block';
+                img.style.margin = '10px auto';
+                section.appendChild(img);
+            }
+
+            container.appendChild(section);
+        });
+    }
+
+    function parseAttributes(str) {
+        const parts = str.split(';').map(p => p.trim()).filter(Boolean);
+        const obj = {};
+        parts.forEach(p => {
+            const [key, value] = p.split(':').map(x => x.trim());
+            obj[key] = value;
+        });
+        return obj;
+    }
+
+    function convertAlign(place) {
+        if (!place) return 'center';
+        if (place.includes('center')) return 'center';
+        if (place.includes('left')) return 'flex-start';
+        if (place.includes('right')) return 'flex-end';
+        return 'center';
+    }
+</script>
+
+</body>
+</html>

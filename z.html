@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        .container {
+            width: 360px;
+            height: 640px;
+            background: white;
+            position: relative;
+            margin: auto;
+            border: 1px solid #ccc;
+        }
+        .box {
+            width: 300px;
+            height: 150px;
+            background: yellow;
+            margin: 10px auto;
+        }
+        .icon-more {
+            width: 25px;
+            height: 25px;
+            background: #000fff;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+        .text {
+            color: black;
+            text-align: center;
+            width: 50%;
+            margin: 20px auto;
+            font-size: 16px;
+        }
+        .icon-add {
+            width: 25px;
+            height: 25px;
+            background: yellow;
+            position: absolute;
+            top: 10px;
+            left: 10px;
+        }
+        .recorder {
+            width: 500px;
+            height: 200px;
+            background: rgba(255, 255, 255, 0.44);
+            margin: 20px auto;
+            position: relative;
+        }
+        .recorder-title, .recorder-text {
+            color: black;
+            position: absolute;
+            left: 10px;
+            top: 50%;
+        }
+        .recorder-title {
+            width: 300px;
+            font-size: 14px;
+        }
+        .recorder-text {
+            width: 200px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="box"></div>
+        <div class="icon-more"></div>
+        <div class="text">Note</div>
+        <div class="icon-add"></div>
+        <div class="recorder">
+            <div class="recorder-title">example</div>
+            <div class="recorder-text">example</div>
+        </div>
+    </div>
+</body>
+</html>
